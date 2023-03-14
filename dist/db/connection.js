@@ -14,7 +14,13 @@ class DatabaseConnection extends sequelize_typescript_1.Sequelize {
             },
             models: [path_1.default.join(__dirname, '..', 'app', 'models', '**')],
         };
-        const connection = super(config.database, config.username, config.password, config);
+        let connection;
+        if (config.use_env_variable) {
+            connection = super(process.env[config.use_env_variable], config);
+        }
+        else {
+            connection = super(config.database, config.username, config.password, config);
+        }
         return connection;
     }
     async connectAndSync() {
