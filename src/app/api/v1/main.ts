@@ -30,7 +30,9 @@ const options: swaggerJsDoc.Options = {
     },
     // security: [{ token: [] }],
   },
-  apis: [__dirname + '/handlers/**/*.ts', __dirname + '/entities/**/*.ts'],
+  apis: process.env.NODE_ENV === "production"
+  ? [__dirname + '/handlers/**/*.js', __dirname + '/entities/**/*.js']
+  : [__dirname + '/handlers/**/*.ts', __dirname + '/entities/**/*.ts']
 };
 
 export const specs = swaggerJsDoc(options) as any;

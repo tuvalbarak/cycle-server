@@ -57,7 +57,9 @@ const options = {
         },
         // security: [{ token: [] }],
     },
-    apis: [__dirname + '/handlers/**/*.ts', __dirname + '/entities/**/*.ts'],
+    apis: process.env.NODE_ENV === "production"
+        ? [__dirname + '/handlers/**/*.js', __dirname + '/entities/**/*.js']
+        : [__dirname + '/handlers/**/*.ts', __dirname + '/entities/**/*.ts']
 };
 exports.specs = (0, swagger_jsdoc_1.default)(options);
 const apiRouter = (0, express_1.Router)();
