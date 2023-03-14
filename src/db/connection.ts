@@ -12,12 +12,17 @@ export default class DatabaseConnection extends Sequelize {
       models: [path.join(__dirname, '..', 'app', 'models', '**')],
     };
 
-    const connection: any = super(
-      config.database,
-      config.username,
-      config.password,
-      config
-    );
+    let connection
+    if (config.use_env_variable) {
+      connection = super(process.env[config.use_env_variable], config);
+    } else {
+      connection = super(
+        config.database,
+        config.username,
+        config.password,
+        config
+      );
+    }
 
     return connection;
   }
