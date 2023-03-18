@@ -1,6 +1,6 @@
 import { Router } from 'express';
 
-import driversHandler from './users/main';
+import driversHandler from './drivers/main';
 
 const cycleHandler = Router();
 
