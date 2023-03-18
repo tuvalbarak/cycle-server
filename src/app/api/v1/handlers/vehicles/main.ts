@@ -5,7 +5,7 @@ import ElectricVehicle from '../../../../models/ElectricVehicle';
 import { ApiError, HttpStatus } from '../../helpers/error';
 import VehicleMeta from '../../../../models/VehiclesMeta';
 
-const vehiclesHandler = Router();
+const vehiclesMetaHandler = Router();
 
 /**
  * @swagger
@@ -19,9 +19,11 @@ const vehiclesHandler = Router();
  *
  */
 
-vehiclesHandler.get('/', 
+vehiclesMetaHandler.get('/', 
   asyncHandler(async (req: Request, res: Response, next: NextFunction) => {
     const vehicles = <VehicleMeta[]>(await VehicleMeta.findAll());
 
     res.json({ code: 200, message: 'ok', data: vehicles });
 }));
+
+export default vehiclesMetaHandler
