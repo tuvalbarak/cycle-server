@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "dev": "ts-node-dev --respawn ./src/server.ts",
-    "build": "npm i && npm run tsc && copyfiles -u 1 src/**/*.json",
+    "build": "npm i && npm run tsc && copyfiles -u 1 src/**/*.json ./dist",
     "console": "node -r ts-node/register ./src/console.ts",
     "tsc": "tsc",
     "start": "node ./dist/server.js"
@@ -14,6 +14,7 @@
   "license": "ISC",
   "dependencies": {
     "@types/swagger-jsdoc": "^6.0.1",
+    "copyfiles": "^2.4.1",
     "dotenv": "^16.0.3",
     "express": "^4.18.2",
     "express-openapi-validator": "^5.0.2",
