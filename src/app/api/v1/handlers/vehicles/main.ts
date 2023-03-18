@@ -55,4 +55,59 @@ vehiclesMetaHandler.get('/:id',
     res.json({ code: 200, message: 'ok', data: vehicle });
 }));
 
+/**
+ * @swagger
+ *  /vehiclesMeta:
+ *  post:
+ *    tags:
+ *      - Vehicles Meta
+ *    requestBody:
+ *      required: true
+ *      content:
+ *        application/json:
+ *          schema:
+ *            type: object
+ *            properties:
+ *              manufacturer:
+ *                type: Battery
+ *                description: The vehicle's orinial manufacturer battery
+ *              brand:
+ *                type: string
+ *                description: The vehicle's brand
+ *              model:
+ *                type: string
+ *                description: The vehicle's model
+ *              image:
+ *                type: string
+ *                description: The vehicle's image
+ *              year:
+ *                type: int
+ *                description: The vehicle's year
+ *              vehicles:
+ *                type: ElectricVehicle[]
+ *                description: List of vehicles
+ *    responses:
+ *      200:
+ *        description: Ok
+ */
+
+vehiclesMetaHandler.post(
+  '/',
+  asyncHandler(async (req: Request, res: Response, next: NextFunction) => {
+    const payload = {
+      manufactureBattery: req.body.manufactureBattery,
+      brand: req.body.brand,
+      model: req.body.model,
+      image: req.body.image,
+      year: req.body.year,
+      vehicles: req.body.vehicles
+    };
+
+    const vehicleMeta = await VehicleMeta.create(payload);
+
+    res.json({ code: 200, message: 'ok', data: vehicleMeta.dataValues})
+  })
+);
+
+
 export default vehiclesMetaHandler
