@@ -44,7 +44,7 @@ driversHandler.get('/',
  *
  */
 
-driversHandler.get('/:id', 
+driversHandler.get('/:iddd', 
   asyncHandler(async (req: Request, res: Response, next: NextFunction) => {
     const driverId = req.params.id;
 
