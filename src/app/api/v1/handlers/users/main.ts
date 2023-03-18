@@ -1,41 +1,41 @@
 import { Router, Response, Request, NextFunction } from 'express';
 import { asyncHandler } from '../../helpers/routing';
 
-import User from '../../../../models/User';
+import Driver from '../../../../models/Driver';
 import { ApiError, HttpStatus } from '../../helpers/error';
 
-const usersHandler = Router();
+const driversHandler = Router();
 
 /**
  * @swagger
- *  /users:
+ *  /drivers:
  *  get:
  *    tags:
- *      - Users
+ *      - Drivers
  *    responses:
  *      200:
  *        description: Ok
  *
  */
 
-usersHandler.get('/', 
+driversHandler.get('/', 
   asyncHandler(async (req: Request, res: Response, next: NextFunction) => {
-    const users = <User[]>(await User.findAll());
+    const drivers = <Driver[]>(await Driver.findAll());
 
-    res.json({ code: 200, message: 'ok', data: users });
+    res.json({ code: 200, message: 'ok', data: drivers });
 }));
 
 /**
  * @swagger
- *  /users/{id}:
+ *  /drivers/{id}:
  *  get:
  *    tags:
- *      - Users
+ *      - Drivers
  *    parameters:
  *      - name: id
  *        schema:
  *          type: integer
- *        description: A valid user id
+ *        description: A valid driver id
  *        required: true
  *        in: path
  *    responses:
@@ -44,23 +44,23 @@ usersHandler.get('/',
  *
  */
 
-usersHandler.get('/:id', 
+driversHandler.get('/:id', 
   asyncHandler(async (req: Request, res: Response, next: NextFunction) => {
-    const userId = req.params.id;
+    const driverId = req.params.id;
 
-    const user = await User.findByPk(userId);
+    const driver = await Driver.findByPk(driverId);
 
-    if (!user) throw new ApiError(HttpStatus.BAD_REQUEST, `User ${userId} not found`);
+    if (!driver) throw new ApiError(HttpStatus.BAD_REQUEST, `Driver ${driverId} not found`);
 
-    res.json({ code: 200, message: 'ok', data: user });
+    res.json({ code: 200, message: 'ok', data: driver });
 }));
 
 /**
  * @swagger
- *  /users:
+ *  /drivers:
  *  post:
  *    tags:
- *      - Users
+ *      - Drivers
  *    requestBody:
  *      required: true
  *      content:
@@ -70,13 +70,13 @@ usersHandler.get('/:id',
  *            properties:
  *              email:
  *                type: string
- *                description: The user's email
+ *                description: The driver's email
  *              first_name:
  *                type: string
- *                description: The user's first name
+ *                description: The driver's first name
  *              last_name:
  *                type: string
- *                description: The user's last name
+ *                description: The driver's last name
  *              username:
  *                type: string
  *                description: The user's username
@@ -88,22 +88,25 @@ usersHandler.get('/:id',
  *        description: Ok
  */
 
-usersHandler.post(
+driversHandler.post(
   '/',
   asyncHandler(async (req: Request, res: Response, next: NextFunction) => {
     const payload = {
       email: req.body.email,
-      firstName: req.body.first_name,
-      lastName: req.body.last_name,
-      username: req.body.username,
-      password: req.body.password
+      name: req.body.name,
+      thumbnail: req.body.thumbnail,
+      phone: req.body.phone,
+      crystalsBalance: req.body.crystalsBalance,
+      drivingCharecteristicId: req.body.drivingCharecteristicId,
+      preferanceId: req.body.preferanceId,
+      vehiclesHistory: req.body.vehiclesHistory,
     };
 
-    const user = await User.create(payload);
+    const driver = await Driver.create(payload);
 
-    res.json({ code: 200, message: 'ok', data: user.dataValues})
+    res.json({ code: 200, message: 'ok', data: driver.dataValues})
   })
 );
 
 
-export default usersHandler
+export default driversHandler

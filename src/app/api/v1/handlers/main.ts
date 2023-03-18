@@ -1,9 +1,9 @@
 import { Router } from 'express';
 
-import usersHandler from './users/main';
+import driversHandler from './users/main';
 
 const cycleHandler = Router();
 
-cycleHandler.use('/users', usersHandler);
+cycleHandler.use('/users', driversHandler);
 
 export default cycleHandler;
