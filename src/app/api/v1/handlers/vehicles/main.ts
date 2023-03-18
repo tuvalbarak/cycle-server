@@ -1,8 +1,6 @@
 import { Router, Response, Request, NextFunction } from 'express';
 import { asyncHandler } from '../../helpers/routing';
 
-import ElectricVehicle from '../../../../models/ElectricVehicle';
-import { ApiError, HttpStatus } from '../../helpers/error';
 import VehicleMeta from '../../../../models/VehiclesMeta';
 
 const vehiclesMetaHandler = Router();
