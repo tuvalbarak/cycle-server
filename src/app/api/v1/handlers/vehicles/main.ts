@@ -111,7 +111,7 @@ vehiclesMetaHandler.post(
   '/',
   asyncHandler(async (req: Request, res: Response, next: NextFunction) => {
     const payload = {
-      manufactureBatteryId: req.body.manufacture_battery_id,
+      manufactureBatteryId: req.body.manufacturer_battery_id,
       brand: req.body.brand,
       model: req.body.model,
       image: req.body.image,

@@ -3,6 +3,8 @@ import { Column, Table, Model, DataType } from "sequelize-typescript";
 export default class Driver extends Model {
   @Column({ primaryKey: true, autoIncrement: true }) id: number;
 
+  @Column googleId: number;
+
   @Column email: string;
 
   @Column name: string;

@@ -68,6 +68,8 @@ driversHandler.get('/:id',
  *          schema:
  *            type: object
  *            properties:
+ *              google_id:
+ *                type: number
  *              email:
  *                type: string
  *                description: The driver's email
@@ -107,6 +109,7 @@ driversHandler.post(
   '/',
   asyncHandler(async (req: Request, res: Response, next: NextFunction) => {
     const payload = {
+      googleId: req.body.google_id,
       email: req.body.email,
       name: req.body.name,
       thumbnail: req.body.thumbnail,
@@ -143,6 +146,8 @@ driversHandler.post(
  *          schema:
  *            type: object
  *            properties:
+ *              google_id:
+ *                type: number
  *              email:
  *                type: string
  *                description: The driver's email
@@ -182,6 +187,7 @@ driversHandler.patch(
   '/:id',
   asyncHandler(async (req: Request, res: Response, next: NextFunction) => {
     const payload = {
+      googleId: req.body.google_id,
       email: req.body.email,
       name: req.body.name,
       thumbnail: req.body.thumbnail,

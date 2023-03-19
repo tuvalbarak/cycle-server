@@ -8,7 +8,7 @@ const batteriesHandler = Router();
 
 /**
  * @swagger
- *  /Batteries:
+ *  /batteries:
  *  get:
  *    tags:
  *      - Batteries
@@ -31,7 +31,7 @@ batteriesHandler.get('/',
 
 /**
  * @swagger
- *  /Batteries:
+ *  /batteries:
  *  post:
  *    tags:
  *      - Batteries
