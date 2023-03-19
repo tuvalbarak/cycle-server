@@ -64,7 +64,7 @@ batteriesHandler.post(
     asyncHandler(async (req: Request, res: Response, next: NextFunction) => {
       const payload = {
         rangeCapacity: req.body.range_capacity,
-        batteryCapacity: req.body.battery_apacity,
+        batteryCapacity: req.body.battery_capacity,
         consumptionPerKm: req.body.consumption_per_km,
         percentage: req.body.percentage,
       };
