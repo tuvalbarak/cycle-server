@@ -14,11 +14,4 @@ export default class Battery extends Model {
   @Column consumptionPerKm: number;
 
   @Column percentage: number;
-
-  @ForeignKey(() => VehicleMeta)
-  @Column vehicleMetaId: number;
-
-  @ForeignKey(() => ElectricVehicle)
-  @Column electricVehicleId: number;
-
 }

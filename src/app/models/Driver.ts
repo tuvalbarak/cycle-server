@@ -1,7 +1,5 @@
-import { Column, Table, Model, BelongsToMany, DataType } from "sequelize-typescript";
-
-
-@Table({ tableName: 'drivers'})
+import { Column, Table, Model, DataType } from "sequelize-typescript";
+@Table({ tableName: 'drivers', timestamps: true})
 export default class Driver extends Model {
   @Column({ primaryKey: true, autoIncrement: true }) id: number;
 
@@ -19,14 +17,8 @@ export default class Driver extends Model {
 
   @Column preferenceId: number;
 
-  // @Column(DataType.ARRAY(DataType.NUMBER)) 
-  // vehiclesHistory: number[];
+  @Column(DataType.ARRAY(DataType.INTEGER)) 
+  vehiclesHistory: number[];
 
-  // @BelongsToMany(() => ElectricVehicle, {
-  //   through: { model: () => DriverVehicle },
-  //   foreignKey: "driverId", 
-  //   otherKey: "electricVehicleId",
-  //   constraints: false
-  // })
-  // vehicles: DriverVehicle[];
+  @Column lastVehicleUsedId: number;
 }
