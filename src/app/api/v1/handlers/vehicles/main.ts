@@ -81,7 +81,7 @@ vehiclesMetaHandler.get('/:id',
  *                type: string
  *                description: The vehicle's image
  *              year:
- *                type: int
+ *                type: integer
  *                description: The vehicle's year
  *              vehicles:
  *                type: ElectricVehicle[]
