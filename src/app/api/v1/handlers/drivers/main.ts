@@ -71,18 +71,27 @@ driversHandler.get('/:id',
  *              email:
  *                type: string
  *                description: The driver's email
- *              first_name:
+ *              name:
  *                type: string
- *                description: The driver's first name
- *              last_name:
+ *                description: The driver's name
+ *              thumbnail:
  *                type: string
- *                description: The driver's last name
- *              username:
+ *                description: The driver's image thumbnail
+ *              phone:
  *                type: string
- *                description: The user's username
- *              password:
- *                type: string
- *                description: The user's password
+ *                description: The driver's phone number
+ *              crystalsBalance:
+ *                type: integer
+ *                description: The driver's crystals balance
+ *              drivingCharacteristicId:
+ *                type: integer
+ *                description: The driver's charecteristic object id
+ *              preferenceId:
+ *                type: integer
+ *                description: The driver's preferences object id
+ *              vehiclesHistory:
+ *                type: integer
+ *                description: The driver's vehicles' ids
  *    responses:
  *      200:
  *        description: Ok
@@ -97,8 +106,8 @@ driversHandler.post(
       thumbnail: req.body.thumbnail,
       phone: req.body.phone,
       crystalsBalance: req.body.crystalsBalance,
-      drivingCharecteristicId: req.body.drivingCharecteristicId,
-      preferanceId: req.body.preferanceId,
+      drivingCharacteristicId: req.body.drivingCharacteristicId,
+      preferenceId: req.body.preferenceId,
       vehiclesHistory: req.body.vehiclesHistory,
     };
 

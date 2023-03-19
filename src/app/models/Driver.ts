@@ -15,9 +15,9 @@ export default class Driver extends Model {
 
   @Column crystalsBalance: number;
 
-  @Column drivingCharecteristicId: number;
+  @Column drivingCharacteristicId: number;
 
-  @Column preferanceId: number;
+  @Column preferenceId: number;
 
   // @Column(DataType.ARRAY(DataType.NUMBER)) 
   // vehiclesHistory: number[];
