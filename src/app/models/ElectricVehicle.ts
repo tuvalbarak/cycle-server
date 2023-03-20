@@ -8,11 +8,11 @@ import VehicleMeta from "./VehiclesMeta";
 export default class ElectricVehicle extends Model {
   @Column({ primaryKey: true, autoIncrement: true }) id: number;
 
-  @HasOne(() => Battery, { sourceKey: "currentBatteryId", foreignKey: 'id' })
-  currentBattery: Battery
-
-  @Unique
+  @ForeignKey(() => Battery)
   @Column currentBatteryId: number;
+
+  @BelongsTo(() => Battery)
+  battery: Battery;
 
   @ForeignKey(() => VehicleMeta)
   @Column vehicleMetaId: number;

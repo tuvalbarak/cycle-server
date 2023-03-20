@@ -1,4 +1,4 @@
-import { Column, Table, Model, DataType, ForeignKey } from "sequelize-typescript";
+import { Column, Table, Model, DataType, ForeignKey, HasOne } from "sequelize-typescript";
 import ElectricVehicle from "./ElectricVehicle";
 import VehicleMeta from "./VehiclesMeta";
 

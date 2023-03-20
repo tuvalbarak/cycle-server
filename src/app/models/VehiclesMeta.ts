@@ -1,4 +1,4 @@
-import { Column, Table, Model, DataType, HasOne, HasMany, Unique } from "sequelize-typescript";
+import { Column, Table, Model, DataType, HasOne, HasMany, Unique, BelongsTo, ForeignKey } from "sequelize-typescript";
 
 import Battery from "./Battery";
 import ElectricVehicle from "./ElectricVehicle";
@@ -8,10 +8,10 @@ import ElectricVehicle from "./ElectricVehicle";
 export default class VehicleMeta extends Model {
   @Column({ primaryKey: true, autoIncrement: true }) id: number;
 
-  @HasOne(() => Battery, { sourceKey: "manufactureBatteryId", foreignKey: 'id' })
-  manufactureBattery: Battery
+  @BelongsTo(() => Battery)
+  battery: Battery;
 
-  @Unique
+  @ForeignKey(() => Battery)
   @Column manufactureBatteryId: number;
 
   @Column brand: string;
