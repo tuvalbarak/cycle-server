@@ -28,7 +28,7 @@ vehiclesMetaHandler.get('/',
     const vehicles = <VehicleMeta[]>(await VehicleMeta.findAll({ 
       include: [{
         association: 'vehicles',
-        include: [ { association: 'currentBattery' } ]
+        include: [ { association: 'battery' } ]
       }]
      }));
 
