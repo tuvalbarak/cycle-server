@@ -1,14 +1,16 @@
 import { Router } from 'express';
 
 import driversHandler from './drivers/main';
-import vehiclesMetaHandler from './vehicles_meta/main'
 import batteriesaHandler from './batteries/main'
+import vehiclesMetaHandler from './vehicles_meta/main'
+import electricVehiclesHandler from './electric_vehicles/main';
 
 const cycleHandler = Router();
 
 cycleHandler.use('/drivers', driversHandler);
-cycleHandler.use('/vehiclesMeta', vehiclesMetaHandler);
 cycleHandler.use('/batteries', batteriesaHandler);
+cycleHandler.use('/vehiclesMeta', vehiclesMetaHandler);
+cycleHandler.use('/electricVehicles', electricVehiclesHandler);
 
 export default cycleHandler;
 
