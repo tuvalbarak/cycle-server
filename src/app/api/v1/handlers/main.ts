@@ -1,7 +1,7 @@
 import { Router } from 'express';
 
 import driversHandler from './drivers/main';
-import vehiclesMetaHandler from './vehicles/main'
+import vehiclesMetaHandler from './vehicles_meta/main'
 import batteriesaHandler from './batteries/main'
 
 const cycleHandler = Router();
