@@ -61,7 +61,7 @@ vehiclesMetaHandler.get('/:id',
     const vehicle = await VehicleMeta.findByPk(vehicleId, {
       include: [{
         association: 'vehicles',
-        include: [{ association: 'currentBattery' }]
+        include: [{ association: 'battery' }]
       }]
     });
 
