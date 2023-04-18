@@ -1,41 +1,41 @@
 import { Router, Response, Request, NextFunction } from 'express';
 import { asyncHandler } from '../../helpers/routing';
 
-import Driver from '../../../../models/Driver';
+import User from '../../../../models/User';
 import { ApiError, HttpStatus } from '../../helpers/error';
 
-const driversHandler = Router();
+const usersHandler = Router();
 
 /**
  * @swagger
- *  /drivers:
+ *  /users:
  *  get:
  *    tags:
- *      - Drivers
+ *      - Users
  *    responses:
  *      200:
  *        description: Ok
  *
  */
 
-driversHandler.get('/', 
+usersHandler.get('/', 
   asyncHandler(async (req: Request, res: Response, next: NextFunction) => {
-    const drivers = <Driver[]>(await Driver.findAll());
+    const users = <User[]>(await User.findAll());
 
-    res.json({ code: 200, message: 'ok', data: drivers });
+    res.json({ code: 200, message: 'ok', data: users });
 }));
 
 /**
  * @swagger
- *  /drivers/{id}:
+ *  /users/{id}:
  *  get:
  *    tags:
- *      - Drivers
+ *      - Users
  *    parameters:
  *      - name: id
  *        schema:
  *          type: integer
- *        description: A valid driver id
+ *        description: A valid user id
  *        required: true
  *        in: path
  *    responses:
@@ -44,23 +44,23 @@ driversHandler.get('/',
  *
  */
 
-driversHandler.get('/:id', 
+usersHandler.get('/:id', 
   asyncHandler(async (req: Request, res: Response, next: NextFunction) => {
-    const driverId = req.params.id;
+    const userId = req.params.id;
 
-    const driver = await Driver.findByPk(driverId);
+    const user = await User.findByPk(userId);
 
-    if (!driver) throw new ApiError(HttpStatus.BAD_REQUEST, `Driver ${driverId} not found`);
+    if (!user) throw new ApiError(HttpStatus.BAD_REQUEST, `user ${userId} not found`);
 
-    res.json({ code: 200, message: 'ok', data: driver });
+    res.json({ code: 200, message: 'ok', data: user });
 }));
 
 /**
  * @swagger
- *  /drivers:
+ *  /users:
  *  post:
  *    tags:
- *      - Drivers
+ *      - Users
  *    requestBody:
  *      required: true
  *      content:
@@ -72,25 +72,25 @@ driversHandler.get('/:id',
  *                type: number
  *              email:
  *                type: string
- *                description: The driver's email
+ *                description: The user's email
  *              name:
  *                type: string
- *                description: The driver's name
+ *                description: The user's name
  *              thumbnail:
  *                type: string
- *                description: The driver's image thumbnail
+ *                description: The user's image thumbnail
  *              phone:
  *                type: string
- *                description: The driver's phone number
+ *                description: The user's phone number
  *              crystals_balance:
  *                type: number
- *                description: The driver's crystals balance
+ *                description: The user's crystals balance
  *              driving_characteristic_id:
  *                type: number
- *                description: The driver's charecteristic object id
+ *                description: The user's charecteristic object id
  *              preference_id:
  *                type: number
- *                description: The driver's preferences object id
+ *                description: The user's preferences object id
  *              last_vehicle_used_id:
  *                type: number
  *              vehicles_history:
@@ -105,7 +105,7 @@ driversHandler.get('/:id',
  *        description: Ok
  */
 
-driversHandler.post(
+usersHandler.post(
   '/',
   asyncHandler(async (req: Request, res: Response, next: NextFunction) => {
     const payload = {
@@ -121,18 +121,18 @@ driversHandler.post(
       vehiclesHistory: req.body.vehicles_history,
     };
 
-    const driver = await Driver.create(payload);
+    const user = await User.create(payload);
 
-    res.json({ code: 200, message: 'ok', data: driver.dataValues})
+    res.json({ code: 200, message: 'ok', data: user.dataValues})
   })
 );
 
 /**
  * @swagger
- *  /drivers/{id}:
+ *  /users/{id}:
  *  patch:
  *    tags:
- *      - Drivers
+ *      - Users
  *    parameters:
  *      - name: id
  *        schema:
@@ -150,25 +150,25 @@ driversHandler.post(
  *                type: number
  *              email:
  *                type: string
- *                description: The driver's email
+ *                description: The user's email
  *              name:
  *                type: string
- *                description: The driver's name
+ *                description: The user's name
  *              thumbnail:
  *                type: string
- *                description: The driver's image thumbnail
+ *                description: The user's image thumbnail
  *              phone:
  *                type: string
- *                description: The driver's phone number
+ *                description: The user's phone number
  *              crystals_balance:
  *                type: number
- *                description: The driver's crystals balance
+ *                description: The user's crystals balance
  *              driving_characteristic_id:
  *                type: number
- *                description: The driver's charecteristic object id
+ *                description: The user's charecteristic object id
  *              preference_id:
  *                type: number
- *                description: The driver's preferences object id
+ *                description: The user's preferences object id
  *              last_vehicle_used_id:
  *                type: number
  *              vehicles_history:
@@ -183,7 +183,7 @@ driversHandler.post(
  *        description: Ok
  */
 
-driversHandler.patch(
+usersHandler.patch(
   '/:id',
   asyncHandler(async (req: Request, res: Response, next: NextFunction) => {
     const payload = {
@@ -199,14 +199,14 @@ driversHandler.patch(
       vehiclesHistory: req.body.vehicles_history,
     };
 
-    let driver = await Driver.findByPk(req.params.id);
+    let user = await User.findByPk(req.params.id);
 
-    if (!driver) { throw new ApiError(HttpStatus.BAD_REQUEST, `Driver ${req.params.id} not found`) };
+    if (!user) { throw new ApiError(HttpStatus.BAD_REQUEST, `User ${req.params.id} not found`) };
 
-    driver = await driver.update(payload, { hooks: true });
-    res.json({ code: 200, message: 'ok', data: driver.dataValues})
+    user = await user.update(payload, { hooks: true });
+    res.json({ code: 200, message: 'ok', data: user.dataValues})
   })
 );
 
 
-export default driversHandler
+export default usersHandler

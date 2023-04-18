@@ -1,6 +1,6 @@
 import { Column, Table, Model, DataType } from "sequelize-typescript";
-@Table({ tableName: 'drivers', timestamps: true})
-export default class Driver extends Model {
+@Table({ tableName: 'users', timestamps: true})
+export default class User extends Model {
   @Column({ primaryKey: true, autoIncrement: true }) id: number;
 
   @Column googleId: number;

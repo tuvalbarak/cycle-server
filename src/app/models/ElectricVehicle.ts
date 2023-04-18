@@ -19,4 +19,7 @@ export default class ElectricVehicle extends Model {
 
   @BelongsTo(() => VehicleMeta)
   vehicleMeta: VehicleMeta
+
+
+  
 }
