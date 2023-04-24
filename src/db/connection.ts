@@ -1,11 +1,10 @@
 import path from 'path';
 import { Sequelize } from 'sequelize-typescript';
-import * as dotenv from 'dotenv'
-dotenv.config()
+import * as dotenv from 'dotenv';
+dotenv.config();
 
 export default class DatabaseConnection extends Sequelize {
   constructor(credentials: any) {
-
     const config = {
       ...credentials,
       define: {
@@ -14,7 +13,7 @@ export default class DatabaseConnection extends Sequelize {
       models: [path.join(__dirname, '..', 'app', 'models', '**')],
     };
 
-    let connection
+    let connection;
     if (config.use_env_variable) {
       connection = super(process.env[config.use_env_variable], config);
     } else {

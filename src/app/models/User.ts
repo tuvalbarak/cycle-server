@@ -1,5 +1,16 @@
-import { Column, Table, Model, DataType } from "sequelize-typescript";
-@Table({ tableName: 'users', timestamps: true})
+import {
+  Column,
+  Table,
+  Model,
+  DataType,
+  BelongsTo,
+  ForeignKey,
+} from 'sequelize-typescript';
+import ChargingStation from './ChargingStation';
+import DrivingCharacteristics from './DrivingCharacteristics';
+import UserPreferances from './UserPreferances';
+
+@Table({ tableName: 'users', timestamps: true })
 export default class User extends Model {
   @Column({ primaryKey: true, autoIncrement: true }) id: number;
 
@@ -15,12 +26,23 @@ export default class User extends Model {
 
   @Column crystalsBalance: number;
 
-  @Column drivingCharacteristicId: number;
-
-  @Column preferenceId: number;
-
-  @Column(DataType.ARRAY(DataType.INTEGER)) 
+  @Column(DataType.ARRAY(DataType.INTEGER))
   vehiclesHistory: number[];
 
   @Column lastVehicleUsedId: number;
+
+  @ForeignKey(() => ChargingStation)
+  @Column
+  chargingStationId: number;
+
+  @BelongsTo(() => ChargingStation)
+  chargingStation: ChargingStation;
+
+  @ForeignKey(() => DrivingCharacteristics)
+  @Column
+  drivingCharacteristicId: number;
+
+  @ForeignKey(() => UserPreferances)
+  @Column
+  preferenceId: number;
 }

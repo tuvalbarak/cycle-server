@@ -20,20 +20,24 @@ const vehiclesMetaHandler = Router();
  *          application/json:
  *            schema:
  *              $ref: '#/components/schemas/VehiclesMeta'
- *          
+ *
  */
 
-vehiclesMetaHandler.get('/', 
+vehiclesMetaHandler.get(
+  '/',
   asyncHandler(async (req: Request, res: Response, next: NextFunction) => {
-    const vehicles = <VehicleMeta[]>(await VehicleMeta.findAll({ 
-      include: [{
-        association: 'vehicles',
-        include: [ { association: 'battery' } ]
-      }]
-     }));
+    const vehicles = <VehicleMeta[]>await VehicleMeta.findAll({
+      include: [
+        {
+          association: 'vehicles',
+          include: [{ association: 'battery' }],
+        },
+      ],
+    });
 
     res.json({ code: 200, message: 'ok', data: vehicles });
-}));
+  })
+);
 
 /**
  * @swagger
@@ -54,21 +58,29 @@ vehiclesMetaHandler.get('/',
  *
  */
 
-vehiclesMetaHandler.get('/:id', 
+vehiclesMetaHandler.get(
+  '/:id',
   asyncHandler(async (req: Request, res: Response, next: NextFunction) => {
     const vehicleId = req.params.id;
 
     const vehicle = await VehicleMeta.findByPk(vehicleId, {
-      include: [{
-        association: 'vehicles',
-        include: [{ association: 'battery' }]
-      }]
+      include: [
+        {
+          association: 'vehicles',
+          include: [{ association: 'battery' }],
+        },
+      ],
     });
 
-    if (!vehicle) throw new ApiError(HttpStatus.BAD_REQUEST, `Vehicle ${vehicleId} not found`);
+    if (!vehicle)
+      throw new ApiError(
+        HttpStatus.BAD_REQUEST,
+        `Vehicle ${vehicleId} not found`
+      );
 
     res.json({ code: 200, message: 'ok', data: vehicle });
-}));
+  })
+);
 
 /**
  * @swagger
@@ -97,7 +109,7 @@ vehiclesMetaHandler.get('/:id',
  *              year:
  *                type: integer
  *                description: The vehicle's year
- *                  
+ *
  *    responses:
  *      200:
  *        description: Ok
@@ -117,18 +129,24 @@ vehiclesMetaHandler.post(
       image: req.body.image,
       year: req.body.year,
     };
-    
-    if (!payload.manufactureBatteryId) { throw new ApiError(HttpStatus.BAD_REQUEST, 'Battery is required') };
+
+    if (!payload.manufactureBatteryId) {
+      throw new ApiError(HttpStatus.BAD_REQUEST, 'Battery is required');
+    }
 
     const battery = await Battery.findByPk(payload.manufactureBatteryId);
-    
-    if (!battery) { throw new ApiError(HttpStatus.BAD_REQUEST, `Battery ${payload.manufactureBatteryId} not found`) };
+
+    if (!battery) {
+      throw new ApiError(
+        HttpStatus.BAD_REQUEST,
+        `Battery ${payload.manufactureBatteryId} not found`
+      );
+    }
 
     const vehicleMeta = await VehicleMeta.create(payload);
 
-    res.json({ code: 200, message: 'ok', data: vehicleMeta.dataValues})
+    res.json({ code: 200, message: 'ok', data: vehicleMeta.dataValues });
   })
 );
 
-
-export default vehiclesMetaHandler
+export default vehiclesMetaHandler;
