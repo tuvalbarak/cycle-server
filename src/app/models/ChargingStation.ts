@@ -5,6 +5,7 @@ import {
   DataType,
   ForeignKey,
   HasOne,
+  BelongsTo,
 } from 'sequelize-typescript';
 import User from './User';
 
@@ -37,9 +38,10 @@ export default class ChargingStation extends Model {
   @Column(DataType.ARRAY(DataType.INTEGER))
   ratings: number[];
 
-  @HasOne(() => User, {
-    foreignKey: 'userId',
-    constraints: false,
-  })
-  user: User;
+  @ForeignKey(() => User)
+  @Column
+  ownerId: number;
+
+  @BelongsTo(() => User)
+  owner: User;
 }

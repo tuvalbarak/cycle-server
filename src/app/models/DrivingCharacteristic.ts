@@ -6,9 +6,10 @@ import {
   BelongsTo,
   ForeignKey,
 } from 'sequelize-typescript';
+import User from './User';
 
 @Table({ tableName: 'driving_characteristics', timestamps: true })
-export default class DrivingCharacteristics extends Model {
+export default class DrivingCharacteristic extends Model {
   @Column({ primaryKey: true, autoIncrement: true }) id: number;
 
   @Column breakesUsageAverage: number;
@@ -16,4 +17,11 @@ export default class DrivingCharacteristics extends Model {
   @Column speedAverage: number;
 
   @Column airConditionsAverage: number;
+
+  @ForeignKey(() => User)
+  @Column
+  driverId: number;
+
+  @BelongsTo(() => User)
+  driver: User;
 }

@@ -1,8 +1,11 @@
-import { Router, Response, Request, NextFunction } from 'express';
 import { asyncHandler } from '../../helpers/routing';
+import { ApiError, HttpStatus } from '../../helpers/error';
+import { Router, Response, Request, NextFunction } from 'express';
 
 import User from '../../../../models/User';
-import { ApiError, HttpStatus } from '../../helpers/error';
+import UserPreferance from '../../../../models/UserPreferance';
+
+import { Landscape } from '../../../../models/UserPreferance';
 
 const usersHandler = Router();
 
@@ -18,12 +21,16 @@ const usersHandler = Router();
  *
  */
 
-usersHandler.get('/', 
+usersHandler.get(
+  '/',
   asyncHandler(async (req: Request, res: Response, next: NextFunction) => {
-    const users = <User[]>(await User.findAll());
+    const users = <User[]>(
+      await User.findAll({ include: [{ association: 'preference' }] })
+    );
 
     res.json({ code: 200, message: 'ok', data: users });
-}));
+  })
+);
 
 /**
  * @swagger
@@ -44,16 +51,21 @@ usersHandler.get('/',
  *
  */
 
-usersHandler.get('/:id', 
+usersHandler.get(
+  '/:id',
   asyncHandler(async (req: Request, res: Response, next: NextFunction) => {
     const userId = req.params.id;
 
-    const user = await User.findByPk(userId);
+    const user = await User.findByPk(userId, {
+      include: [{ association: 'preference' }],
+    });
 
-    if (!user) throw new ApiError(HttpStatus.BAD_REQUEST, `user ${userId} not found`);
+    if (!user)
+      throw new ApiError(HttpStatus.BAD_REQUEST, `user ${userId} not found`);
 
     res.json({ code: 200, message: 'ok', data: user });
-}));
+  })
+);
 
 /**
  * @swagger
@@ -122,8 +134,17 @@ usersHandler.post(
     };
 
     const user = await User.create(payload);
+    await UserPreferance.create({
+      userId: user.id,
+      areNotificationAllowed: true,
+      areTollRoadsAllowed: true,
+      areMultipleChargingStopsAllowed: true,
+      roadLandscape: 'Nature',
+    });
 
-    res.json({ code: 200, message: 'ok', data: user.dataValues})
+    await user.reload({ include: [{ association: 'preference' }] });
+
+    res.json({ code: 200, message: 'ok', data: user.dataValues });
   })
 );
 
@@ -137,7 +158,7 @@ usersHandler.post(
  *      - name: id
  *        schema:
  *          type: integer
- *        description: A valid vehicle id
+ *        description: A valid user id
  *        in: path
  *    requestBody:
  *      required: true
@@ -166,11 +187,19 @@ usersHandler.post(
  *              driving_characteristic_id:
  *                type: number
  *                description: The user's charecteristic object id
- *              preference_id:
- *                type: number
- *                description: The user's preferences object id
  *              last_vehicle_used_id:
  *                type: number
+ *              preference:
+ *                type: object
+ *                properties:
+ *                  are_notification_allowed:
+ *                    type: boolean
+ *                  are_toll_roads_allowed:
+ *                    type: boolean
+ *                  are_multiple_charging_stops_allowed:
+ *                    type: boolean
+ *                  road_landscape:
+ *                    type: string
  *              vehicles_history:
  *                type: array
  *                items:
@@ -186,7 +215,7 @@ usersHandler.post(
 usersHandler.patch(
   '/:id',
   asyncHandler(async (req: Request, res: Response, next: NextFunction) => {
-    const payload = {
+    const userPayload = {
       googleId: req.body.google_id,
       email: req.body.email,
       name: req.body.name,
@@ -194,19 +223,32 @@ usersHandler.patch(
       phone: req.body.phone,
       crystalsBalance: req.body.crystals_balance,
       drivingCharacteristicId: req.body.driving_characteristic_id,
-      preferenceId: req.body.preference_id,
       lastVehicleUsedId: req.body.last_vehicle_used_id,
       vehiclesHistory: req.body.vehicles_history,
+      preference: {
+        areNotificationAllowed: req.body.preference.are_notification_allowed,
+        areTollRoadsAllowed: req.body.preference.are_toll_roads_allowed,
+        areMultipleChargingStopsAllowed:
+          req.body.preference.are_multiple_charging_stops_allowed,
+        roadLandscape: req.body.preference.road_landscape,
+      },
     };
 
-    let user = await User.findByPk(req.params.id);
+    let user = await User.findByPk(req.params.id, {
+      include: [{ association: 'preference' }],
+    });
 
-    if (!user) { throw new ApiError(HttpStatus.BAD_REQUEST, `User ${req.params.id} not found`) };
+    if (!user) {
+      throw new ApiError(
+        HttpStatus.BAD_REQUEST,
+        `User ${req.params.id} not found`
+      );
+    }
 
-    user = await user.update(payload, { hooks: true });
-    res.json({ code: 200, message: 'ok', data: user.dataValues})
+    user = await user.update(userPayload, { hooks: true });
+
+    res.json({ code: 200, message: 'ok', data: user.dataValues });
   })
 );
 
-
-export default usersHandler
+export default usersHandler;

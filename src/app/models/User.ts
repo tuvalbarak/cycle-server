@@ -5,10 +5,11 @@ import {
   DataType,
   BelongsTo,
   ForeignKey,
+  HasOne,
 } from 'sequelize-typescript';
 import ChargingStation from './ChargingStation';
-import DrivingCharacteristics from './DrivingCharacteristics';
-import UserPreferances from './UserPreferances';
+import DrivingCharacteristic from './DrivingCharacteristic';
+import UserPreferance from './UserPreferance';
 
 @Table({ tableName: 'users', timestamps: true })
 export default class User extends Model {
@@ -31,18 +32,21 @@ export default class User extends Model {
 
   @Column lastVehicleUsedId: number;
 
-  @ForeignKey(() => ChargingStation)
-  @Column
-  chargingStationId: number;
+  @HasOne(() => UserPreferance, {
+    foreignKey: 'userId',
+    constraints: false,
+  })
+  preference: UserPreferance;
 
-  @BelongsTo(() => ChargingStation)
-  chargingStation: ChargingStation;
+  @HasOne(() => DrivingCharacteristic, {
+    foreignKey: 'driverId',
+    constraints: false,
+  })
+  drivingCharacteristic: DrivingCharacteristic;
 
-  @ForeignKey(() => DrivingCharacteristics)
-  @Column
-  drivingCharacteristicId: number;
-
-  @ForeignKey(() => UserPreferances)
-  @Column
-  preferenceId: number;
+  @HasOne(() => ChargingStation, {
+    foreignKey: 'ownerId',
+    constraints: false,
+  })
+  station: ChargingStation;
 }

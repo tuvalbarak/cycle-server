@@ -26,7 +26,7 @@ chargingStationsHandler.get(
   '/',
   asyncHandler(async (req: Request, res: Response, next: NextFunction) => {
     const chargingStations = <ChargingStation[]>await ChargingStation.findAll({
-      include: [{ model: User }],
+      include: [{ association: 'owner' }],
     });
 
     res.json({ code: 200, message: 'ok', data: chargingStations });
@@ -114,7 +114,7 @@ chargingStationsHandler.get(
  *              isPrivate:
  *                type: boolean
  *                description: Charging station is privately owned
- *              userId:
+ *              ownerId:
  *                type: number
  *                description: Charging station owner id
  *
@@ -142,25 +142,21 @@ chargingStationsHandler.post(
       power: req.body.power,
       connectorType: req.body.connectorType,
       isPrivate: req.body.isPrivate,
-      userId: req.body.userId,
+      ownerId: req.body.ownerId,
     };
 
-    if (!payload.userId) {
-      throw new ApiError(HttpStatus.BAD_REQUEST, 'UserId is required');
-    }
+    if (req.body.ownerId) {
+      const owner = await User.findByPk(payload.ownerId);
 
-    const user = await User.findByPk(payload.userId);
-
-    if (!user) {
-      throw new ApiError(
-        HttpStatus.BAD_REQUEST,
-        `User ${payload.userId} not found`
-      );
+      if (!owner) {
+        throw new ApiError(
+          HttpStatus.BAD_REQUEST,
+          `Owner ${payload.ownerId} not found`
+        );
+      }
     }
 
     const chargingStation = await ChargingStation.create(payload);
-
-    chargingStation.user = user;
 
     res.json({ code: 200, message: 'ok', data: chargingStation.dataValues });
   })
