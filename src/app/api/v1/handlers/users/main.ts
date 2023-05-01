@@ -109,9 +109,6 @@ usersHandler.get(
  *                type: array
  *                items:
  *                  type: number
- *                  properties:
- *                    id:
- *                      type: number
  *    responses:
  *      200:
  *        description: Ok

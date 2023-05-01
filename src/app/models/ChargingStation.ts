@@ -4,10 +4,12 @@ import {
   Model,
   DataType,
   ForeignKey,
-  HasOne,
+  HasMany,
   BelongsTo,
 } from 'sequelize-typescript';
+
 import User from './User';
+import Comment from './Comment';
 
 @Table({ tableName: 'charging_stations', timestamps: true })
 export default class ChargingStation extends Model {
@@ -35,8 +37,16 @@ export default class ChargingStation extends Model {
 
   @Column isPrivate: boolean;
 
+  @Column condition: string;
+
   @Column(DataType.ARRAY(DataType.INTEGER))
   ratings: number[];
+
+  @HasMany(() => Comment, {
+    foreignKey: 'chargingStationId',
+    constraints: false,
+  })
+  comments: Comment[];
 
   @ForeignKey(() => User)
   @Column

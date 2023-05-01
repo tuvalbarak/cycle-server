@@ -3,6 +3,7 @@ import { ApiError, HttpStatus } from '../../helpers/error';
 import { Router, Response, Request, NextFunction } from 'express';
 import ChargingStation from '../../../../models/ChargingStation';
 import User from '../../../../models/User';
+import Comment from '../../../../models/Comment';
 
 const chargingStationsHandler = Router();
 
@@ -26,7 +27,7 @@ chargingStationsHandler.get(
   '/',
   asyncHandler(async (req: Request, res: Response, next: NextFunction) => {
     const chargingStations = <ChargingStation[]>await ChargingStation.findAll({
-      include: [{ association: 'owner' }],
+      include: [{ association: 'owner' }, { association: 'comments' }],
     });
 
     res.json({ code: 200, message: 'ok', data: chargingStations });
@@ -58,7 +59,7 @@ chargingStationsHandler.get(
     const chargingStationId = req.params.id;
 
     const chargingStation = await ChargingStation.findByPk(chargingStationId, {
-      include: [{ model: User }],
+      include: [{ association: 'owner' }, { association: 'comments' }],
     });
 
     if (!chargingStation)
@@ -114,6 +115,9 @@ chargingStationsHandler.get(
  *              isPrivate:
  *                type: boolean
  *                description: Charging station is privately owned
+ *              condition:
+ *                type: string
+ *                description: Occupied, Malfunction, Available
  *              ownerId:
  *                type: number
  *                description: Charging station owner id
@@ -142,23 +146,155 @@ chargingStationsHandler.post(
       power: req.body.power,
       connectorType: req.body.connectorType,
       isPrivate: req.body.isPrivate,
+      condition: req.body.condition,
       ownerId: req.body.ownerId,
     };
 
-    if (req.body.ownerId) {
-      const owner = await User.findByPk(payload.ownerId);
+    // if (req.body.ownerId) {
+    //   const owner = await User.findByPk(payload.ownerId);
 
-      if (!owner) {
-        throw new ApiError(
-          HttpStatus.BAD_REQUEST,
-          `Owner ${payload.ownerId} not found`
-        );
-      }
-    }
+    //   if (!owner) {
+    //     throw new ApiError(
+    //       HttpStatus.BAD_REQUEST,
+    //       `Owner ${payload.ownerId} not found`
+    //     );
+    //   }
+    // }
 
     const chargingStation = await ChargingStation.create(payload);
+    // const comment = await Comment.create();
+
+    // chargingStation.comments.push(comment);
+
+    await chargingStation.reload({
+      include: [{ association: 'owner' }, { association: 'comments' }],
+    });
 
     res.json({ code: 200, message: 'ok', data: chargingStation.dataValues });
+  })
+);
+
+// /**
+//  * @swagger
+//  *  /chargingStations/{id}/comment:
+//  *  post:
+//  *    tags:
+//  *      - Charging Stations
+//  *    parameters:
+//  *      - name: id
+//  *        schema:
+//  *          type: integer
+//  *        description: A valid charging station id
+//  *        required: true
+//  *        in: path
+//  *    requestBody:
+//  *      required: true
+//  *      content:
+//  *        application/json:
+//  *          schema:
+//  *            type: object
+//  *            properties:
+//  *              content:
+//  *                type: string
+//  *              comentator:
+//  *                type: string
+//  *    responses:
+//  *      200:
+//  *        description: Ok
+//  *        content:
+//  *          application/json:
+//  *            schema:
+//  *              $ref: '#/components/schemas/Comment'
+//  */
+
+// chargingStationsHandler.post(
+//   '/:id/comment',
+//   asyncHandler(async (req: Request, res: Response, next: NextFunction) => {
+//     const payload = {
+//       name: req.body.name,
+//       lat: req.body.lat,
+//       lng: req.body.lng,
+//       provider: req.body.provider,
+//       priceDetails: req.body.priceDetails,
+//       address: req.body.address,
+//       city: req.body.city,
+//       count: req.body.count,
+//       power: req.body.power,
+//       connectorType: req.body.connectorType,
+//       isPrivate: req.body.isPrivate,
+//       condition: req.body.condition,
+//       ownerId: req.body.ownerId,
+//     };
+
+//     // if (req.body.ownerId) {
+//     //   const owner = await User.findByPk(payload.ownerId);
+
+//     //   if (!owner) {
+//     //     throw new ApiError(
+//     //       HttpStatus.BAD_REQUEST,
+//     //       `Owner ${payload.ownerId} not found`
+//     //     );
+//     //   }
+//     // }
+
+//     const chargingStation = await ChargingStation.create(payload);
+//     // const comment = await Comment.create();
+
+//     // chargingStation.comments.push(comment);
+
+//     await chargingStation.reload({
+//       include: [{ association: 'owner' }, { association: 'comments' }],
+//     });
+
+//     res.json({ code: 200, message: 'ok', data: chargingStation.dataValues });
+//   })
+// );
+
+/**
+ * @swagger
+ *  /chargingStations/{chargingStationId}/comment:
+ *  post:
+ *    tags:
+ *      - Charging Stations
+ *    parameters:
+ *      - name: chargingStationId
+ *        schema:
+ *          type: integer
+ *        description: A valid charging station id
+ *        required: true
+ *        in: path
+ *    requestBody:
+ *      required: true
+ *      content:
+ *        application/json:
+ *          schema:
+ *            type: object
+ *            properties:
+ *              content:
+ *                type: string
+ *              commentator:
+ *                type: string
+ *    responses:
+ *      200:
+ *        description: Ok
+ *        content:
+ *          application/json:
+ *            schema:
+ *              $ref: '#/components/schemas/Comment'
+ */
+
+chargingStationsHandler.post(
+  '/:chargingStationId/comment',
+  asyncHandler(async (req: Request, res: Response, next: NextFunction) => {
+    const payload = {
+      chargingStationId: req.params.chargingStationId,
+      commentator: req.body.commentator,
+      content: req.body.content,
+    };
+
+    const comment = await Comment.create(payload);
+
+    res.json({ code: 200, message: 'ok', data: comment.dataValues });
   })
 );
 

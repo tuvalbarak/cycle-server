@@ -1,10 +1,19 @@
-import { Column, Table, Model, DataType, HasOne, HasMany, Unique, BelongsTo, ForeignKey } from "sequelize-typescript";
+import {
+  Column,
+  Table,
+  Model,
+  DataType,
+  HasOne,
+  HasMany,
+  Unique,
+  BelongsTo,
+  ForeignKey,
+} from 'sequelize-typescript';
 
-import Battery from "./Battery";
-import ElectricVehicle from "./ElectricVehicle";
+import Battery from './Battery';
+import ElectricVehicle from './ElectricVehicle';
 
-
-@Table({ tableName: 'vehicles_meta', timestamps: true})
+@Table({ tableName: 'vehicles_meta', timestamps: true })
 export default class VehicleMeta extends Model {
   @Column({ primaryKey: true, autoIncrement: true }) id: number;
 
@@ -12,7 +21,8 @@ export default class VehicleMeta extends Model {
   battery: Battery;
 
   @ForeignKey(() => Battery)
-  @Column manufactureBatteryId: number;
+  @Column
+  manufactureBatteryId: number;
 
   @Column brand: string;
 
@@ -20,12 +30,11 @@ export default class VehicleMeta extends Model {
 
   @Column image: string;
 
-  @Column year: number;    
+  @Column year: number;
 
   @HasMany(() => ElectricVehicle, {
-    foreignKey: "vehicleMetaId",
-    constraints: false
+    foreignKey: 'vehicleMetaId',
+    constraints: false,
   })
   vehicles: ElectricVehicle[];
-
 }

@@ -139,7 +139,34 @@
  *        isPrivate:
  *          type: boolean
  *          description: Indicates whether the station is private or not
+ *        condition:
+ *          type: string
+ *          description: Occupied, Malfunction, Available
+ *        comments:
+ *          type: array
+ *          items:
+ *            $ref: '#/components/schemas/Comment'
+ *            description: The charging station comments
  *        user:
  *          $ref: '#/components/schemas/User'
  *          description: The user who owns the charging station, if applicable
+ *
+ *    Comment:
+ *      type: object
+ *      properties:
+ *        id:
+ *          type: number
+ *          description: The unique identifier for the comment
+ *        content:
+ *          type: string
+ *          description: The content of the comment
+ *        createdAt:
+ *          type: string
+ *          description: Timestamp of the comment
+ *        comentator:
+ *          type: string
+ *          description: The name of the comment creator
+ *        chargingStationId:
+ *          type: number
+ *          description: The id of the charging station
  */
