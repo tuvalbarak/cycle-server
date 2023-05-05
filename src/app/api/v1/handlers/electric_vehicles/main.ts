@@ -5,6 +5,7 @@ import { Router, Response, Request, NextFunction } from 'express';
 import Battery from '../../../../models/Battery';
 import VehicleMeta from '../../../../models/VehiclesMeta';
 import ElectricVehicle from '../../../../models/ElectricVehicle';
+import User from '../../../../models/User';
 
 const electricVehiclesHandler = Router();
 
@@ -27,7 +28,11 @@ const electricVehiclesHandler = Router();
 electricVehiclesHandler.get(
   '/',
   asyncHandler(async (req: Request, res: Response, next: NextFunction) => {
+    const user = <User>req['user'];
     const electricVehicles = <ElectricVehicle[]>await ElectricVehicle.findAll({
+      where: {
+        ownerId: user.id,
+      },
       include: [{ association: 'vehicleMeta' }, { association: 'battery' }],
     });
 
