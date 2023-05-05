@@ -209,13 +209,12 @@ usersHandler.patch(
       drivingCharacteristicId: req.body.driving_characteristic_id,
       lastVehicleUsedId: req.body.last_vehicle_used_id,
       vehiclesHistory: req.body.vehicles_history,
-      preference: {
-        areNotificationAllowed: req.body.preference.are_notification_allowed,
-        areTollRoadsAllowed: req.body.preference.are_toll_roads_allowed,
-        areMultipleChargingStopsAllowed:
-          req.body.preference.are_multiple_charging_stops_allowed,
-        roadLandscape: req.body.preference.road_landscape,
-      },
+      // preference: {
+      //   areNotificationAllowed: req.body.preference.are_notification_allowed,
+      //   areTollRoadsAllowed: req.body.preference.are_toll_roads_allowed,
+      //   areMultipleChargingStopsAllowed: req.body.preference.are_multiple_charging_stops_allowed,
+      //   roadLandscape: req.body.preference.road_landscape,
+      // },
     };
 
     let user = await User.findByPk(req.params.id, {
