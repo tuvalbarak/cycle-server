@@ -15,24 +15,25 @@ const options: swaggerJsDoc.Options = {
     },
     servers: [
       {
-        url: "/api/v1",
-        description: 'Development server'
+        url: '/api/v1',
+        description: 'Development server',
       },
     ],
     components: {
-      // securitySchemes: {
-      //   token: {
-      //     type: 'apiKey',
-      //     in: 'header',
-      //     name: 'X-Auth-Token',
-      //   },
-      // },
+      securitySchemes: {
+        token: {
+          type: 'apiKey',
+          in: 'header',
+          name: 'X-Auth-Token',
+        },
+      },
     },
-    // security: [{ token: [] }],
+    security: [{ token: [] }],
   },
-  apis: process.env.NODE_ENV === "production"
-  ? [__dirname + '/handlers/**/*.js', __dirname + '/entities/**/*.js']
-  : [__dirname + '/handlers/**/*.ts', __dirname + '/entities/**/*.ts']
+  apis:
+    process.env.NODE_ENV === 'production'
+      ? [__dirname + '/handlers/**/*.js', __dirname + '/entities/**/*.js']
+      : [__dirname + '/handlers/**/*.ts', __dirname + '/entities/**/*.ts'],
 };
 
 export const specs = swaggerJsDoc(options) as any;

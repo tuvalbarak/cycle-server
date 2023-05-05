@@ -1,4 +1,5 @@
 import { Router } from 'express';
+import { isAuth } from '../../helpers/authentication/jwt';
 
 import authHandler from './auth/main';
 import usersHandler from './users/main';
@@ -10,10 +11,10 @@ import chargingStationsHandler from './charging_stations/main';
 const cycleHandler = Router();
 
 cycleHandler.use('/auth', authHandler);
-cycleHandler.use('/users', usersHandler);
-cycleHandler.use('/batteries', batteriesaHandler);
-cycleHandler.use('/vehiclesMeta', vehiclesMetaHandler);
-cycleHandler.use('/electricVehicles', electricVehiclesHandler);
-cycleHandler.use('/chargingStations', chargingStationsHandler);
+cycleHandler.use('/users', isAuth(), usersHandler);
+cycleHandler.use('/batteries', isAuth(), batteriesaHandler);
+cycleHandler.use('/vehiclesMeta', isAuth(), vehiclesMetaHandler);
+cycleHandler.use('/electricVehicles', isAuth(), electricVehiclesHandler);
+cycleHandler.use('/chargingStations', isAuth(), chargingStationsHandler);
 
 export default cycleHandler;

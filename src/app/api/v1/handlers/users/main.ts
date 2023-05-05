@@ -34,17 +34,10 @@ usersHandler.get(
 
 /**
  * @swagger
- *  /users/{id}:
+ *  /users/me:
  *  get:
  *    tags:
  *      - Users
- *    parameters:
- *      - name: id
- *        schema:
- *          type: integer
- *        description: A valid user id
- *        required: true
- *        in: path
  *    responses:
  *      200:
  *        description: Ok
@@ -52,16 +45,10 @@ usersHandler.get(
  */
 
 usersHandler.get(
-  '/:id',
+  '/me',
   asyncHandler(async (req: Request, res: Response, next: NextFunction) => {
-    const userId = req.params.id;
-
-    const user = await User.findByPk(userId, {
-      include: [{ association: 'preference' }],
-    });
-
-    if (!user)
-      throw new ApiError(HttpStatus.BAD_REQUEST, `user ${userId} not found`);
+    const user = <User>req['user'];
+    await user.reload({ include: [{ association: 'preference' }] });
 
     res.json({ code: 200, message: 'ok', data: user });
   })
