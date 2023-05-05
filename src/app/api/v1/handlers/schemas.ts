@@ -72,7 +72,7 @@
  *          type: integer
  *          description: The unique identifier for the user
  *        googleId:
- *          type: integer
+ *          type: string
  *          description: The user's Google ID
  *        email:
  *          type: string

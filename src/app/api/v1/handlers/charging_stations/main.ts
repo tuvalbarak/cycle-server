@@ -89,7 +89,7 @@ chargingStationsHandler.get(
  *                type: string
  *              lat:
  *                type: number
- *              long:
+ *              lng:
  *                type: number
  *              provider:
  *                type: string

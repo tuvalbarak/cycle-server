@@ -15,7 +15,7 @@ import UserPreferance from './UserPreferance';
 export default class User extends Model {
   @Column({ primaryKey: true, autoIncrement: true }) id: number;
 
-  @Column googleId: number;
+  @Column googleId: string;
 
   @Column email: string;
 
