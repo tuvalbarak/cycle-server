@@ -6,10 +6,12 @@ import {
   BelongsTo,
   ForeignKey,
   HasOne,
+  HasMany,
 } from 'sequelize-typescript';
 import ChargingStation from './ChargingStation';
 import DrivingCharacteristic from './DrivingCharacteristic';
 import UserPreferance from './UserPreferance';
+import ElectricVehicle from './ElectricVehicle';
 
 @Table({ tableName: 'users', timestamps: true })
 export default class User extends Model {
@@ -27,10 +29,18 @@ export default class User extends Model {
 
   @Column crystalsBalance: number;
 
-  @Column(DataType.ARRAY(DataType.INTEGER))
-  vehiclesHistory: number[];
+  // @Column(DataType.ARRAY(DataType.INTEGER))
+  // vehiclesHistory: number[];
 
-  @Column lastVehicleUsedId: number;
+  @HasMany(() => ElectricVehicle, {
+    foreignKey: 'ownerId',
+    constraints: false,
+  })
+  electricVehicles: ElectricVehicle[];
+
+  // @Column lastVehicleUsedId: number;
+
+  @Column myElectricVehicle: number;
 
   @HasOne(() => UserPreferance, {
     foreignKey: 'userId',

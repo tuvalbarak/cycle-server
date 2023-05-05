@@ -21,20 +21,19 @@ const electricVehiclesHandler = Router();
  *          application/json:
  *            schema:
  *              $ref: '#/components/schemas/ElectricVehicle'
- *          
+ *
  */
 
-electricVehiclesHandler.get('/', 
+electricVehiclesHandler.get(
+  '/',
   asyncHandler(async (req: Request, res: Response, next: NextFunction) => {
-    const electricVehicles = <ElectricVehicle[]>(await ElectricVehicle.findAll({
-      include: [
-        { association: 'vehicleMeta' },
-        { association: 'battery' }
-      ]
-    }));
+    const electricVehicles = <ElectricVehicle[]>await ElectricVehicle.findAll({
+      include: [{ association: 'vehicleMeta' }, { association: 'battery' }],
+    });
 
     res.json({ code: 200, message: 'ok', data: electricVehicles });
-}));
+  })
+);
 
 /**
  * @swagger
@@ -55,21 +54,24 @@ electricVehiclesHandler.get('/',
  *
  */
 
-electricVehiclesHandler.get('/:id', 
+electricVehiclesHandler.get(
+  '/:id',
   asyncHandler(async (req: Request, res: Response, next: NextFunction) => {
     const electricVehicleId = req.params.id;
 
     const electricVehicle = await ElectricVehicle.findByPk(electricVehicleId, {
-      include: [
-        { association: 'vehicleMeta' },
-        { association: 'battery' }
-      ]
+      include: [{ association: 'vehicleMeta' }, { association: 'battery' }],
     });
 
-    if (!electricVehicle) throw new ApiError(HttpStatus.BAD_REQUEST, `Vehicle ${electricVehicleId} not found`);
+    if (!electricVehicle)
+      throw new ApiError(
+        HttpStatus.BAD_REQUEST,
+        `Vehicle ${electricVehicleId} not found`
+      );
 
     res.json({ code: 200, message: 'ok', data: electricVehicle });
-}));
+  })
+);
 
 /**
  * @swagger
@@ -88,7 +90,10 @@ electricVehiclesHandler.get('/:id',
  *                type: number
  *              vehicle_meta_id:
  *                type: number
- *                description: The vehicle's meta id               
+ *                description: The vehicle's meta id
+ *              owner_id:
+ *                type: number
+ *                description: The vehicle's owner id (the user who creates it)
  *    responses:
  *      200:
  *        description: Ok
@@ -104,22 +109,42 @@ electricVehiclesHandler.post(
     const payload = {
       currentBatteryId: req.body.current_battery_id,
       vehicleMetaId: req.body.vehicle_meta_id,
+      ownerId: req.body.owner_id,
     };
-    
-    if (!payload.currentBatteryId) { throw new ApiError(HttpStatus.BAD_REQUEST, 'currentBatteryId is required') };
-    if (!payload.vehicleMetaId) { throw new ApiError(HttpStatus.BAD_REQUEST, 'vehicleMetaId is required') };
+
+    if (!payload.currentBatteryId) {
+      throw new ApiError(
+        HttpStatus.BAD_REQUEST,
+        'currentBatteryId is required'
+      );
+    }
+    if (!payload.vehicleMetaId) {
+      throw new ApiError(HttpStatus.BAD_REQUEST, 'vehicleMetaId is required');
+    }
+    if (!payload.ownerId) {
+      throw new ApiError(HttpStatus.BAD_REQUEST, 'ownerId is required');
+    }
 
     const battery = await Battery.findByPk(payload.currentBatteryId);
     const vehicleMeta = await VehicleMeta.findByPk(payload.vehicleMetaId);
-    
-    if (!battery) { throw new ApiError(HttpStatus.BAD_REQUEST, `Battery ${payload.currentBatteryId} not found`) };
-    if (!vehicleMeta) { throw new ApiError(HttpStatus.BAD_REQUEST, `Battery ${payload.currentBatteryId} not found`) };
+
+    if (!battery) {
+      throw new ApiError(
+        HttpStatus.BAD_REQUEST,
+        `Battery ${payload.currentBatteryId} not found`
+      );
+    }
+    if (!vehicleMeta) {
+      throw new ApiError(
+        HttpStatus.BAD_REQUEST,
+        `Battery ${payload.currentBatteryId} not found`
+      );
+    }
 
     const electricVehicle = await ElectricVehicle.create(payload);
 
-    res.json({ code: 200, message: 'ok', data: electricVehicle.dataValues});
+    res.json({ code: 200, message: 'ok', data: electricVehicle.dataValues });
   })
 );
-
 
 export default electricVehiclesHandler;

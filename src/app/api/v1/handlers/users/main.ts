@@ -24,9 +24,12 @@ const usersHandler = Router();
 usersHandler.get(
   '/',
   asyncHandler(async (req: Request, res: Response, next: NextFunction) => {
-    const users = <User[]>(
-      await User.findAll({ include: [{ association: 'preference' }] })
-    );
+    const users = <User[]>await User.findAll({
+      include: [
+        { association: 'preference' },
+        { association: 'electricVehicles' },
+      ],
+    });
 
     res.json({ code: 200, message: 'ok', data: users });
   })
@@ -48,7 +51,12 @@ usersHandler.get(
   '/me',
   asyncHandler(async (req: Request, res: Response, next: NextFunction) => {
     const user = <User>req['user'];
-    await user.reload({ include: [{ association: 'preference' }] });
+    await user.reload({
+      include: [
+        { association: 'preference' },
+        { association: 'electricVehicles' },
+      ],
+    });
 
     res.json({ code: 200, message: 'ok', data: user });
   })
@@ -90,12 +98,12 @@ usersHandler.get(
  *              preference_id:
  *                type: number
  *                description: The user's preferences object id
- *              last_vehicle_used_id:
+ *              my_electric_vehicle:
  *                type: number
- *              vehicles_history:
+ *              electric_vehicles:
  *                type: array
  *                items:
- *                  type: number
+ *                  $ref: '#/components/schemas/ElectricVehicle'
  *    responses:
  *      200:
  *        description: Ok
@@ -113,8 +121,8 @@ usersHandler.post(
       crystalsBalance: req.body.crystals_balance,
       drivingCharacteristicId: req.body.driving_characteristic_id,
       preferenceId: req.body.preference_id,
-      lastVehicleUsedId: req.body.last_vehicle_used_id,
-      vehiclesHistory: req.body.vehicles_history,
+      myElectricVehicle: req.body.my_electric_vehicle,
+      electricVehicles: req.body.electric_vehicles,
     };
 
     const user = await User.create(payload);
@@ -126,7 +134,12 @@ usersHandler.post(
       roadLandscape: 'Nature',
     });
 
-    await user.reload({ include: [{ association: 'preference' }] });
+    await user.reload({
+      include: [
+        { association: 'preference' },
+        { association: 'electricVehicles' },
+      ],
+    });
 
     res.json({ code: 200, message: 'ok', data: user.dataValues });
   })
@@ -171,8 +184,6 @@ usersHandler.post(
  *              driving_characteristic_id:
  *                type: number
  *                description: The user's charecteristic object id
- *              last_vehicle_used_id:
- *                type: number
  *              preference:
  *                type: object
  *                properties:
@@ -184,13 +195,12 @@ usersHandler.post(
  *                    type: boolean
  *                  road_landscape:
  *                    type: string
- *              vehicles_history:
+ *              my_electric_vehicle:
+ *                type: number
+ *              electric_vehicles:
  *                type: array
  *                items:
- *                  type: number
- *                  properties:
- *                    id:
- *                      type: number
+ *                  $ref: '#/components/schemas/ElectricVehicle'
  *    responses:
  *      200:
  *        description: Ok
@@ -207,8 +217,8 @@ usersHandler.patch(
       phone: req.body.phone,
       crystalsBalance: req.body.crystals_balance,
       drivingCharacteristicId: req.body.driving_characteristic_id,
-      lastVehicleUsedId: req.body.last_vehicle_used_id,
-      vehiclesHistory: req.body.vehicles_history,
+      myElectricVehicle: req.body.my_electric_vehicle,
+      electricVehicles: req.body.electric_vehicles,
       // preference: {
       //   areNotificationAllowed: req.body.preference.are_notification_allowed,
       //   areTollRoadsAllowed: req.body.preference.are_toll_roads_allowed,
@@ -218,7 +228,10 @@ usersHandler.patch(
     };
 
     let user = await User.findByPk(req.params.id, {
-      include: [{ association: 'preference' }],
+      include: [
+        { association: 'preference' },
+        { association: 'electricVehicles' },
+      ],
     });
 
     if (!user) {

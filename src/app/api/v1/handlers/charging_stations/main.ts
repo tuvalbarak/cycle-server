@@ -150,21 +150,7 @@ chargingStationsHandler.post(
       ownerId: req.body.ownerId,
     };
 
-    // if (req.body.ownerId) {
-    //   const owner = await User.findByPk(payload.ownerId);
-
-    //   if (!owner) {
-    //     throw new ApiError(
-    //       HttpStatus.BAD_REQUEST,
-    //       `Owner ${payload.ownerId} not found`
-    //     );
-    //   }
-    // }
-
     const chargingStation = await ChargingStation.create(payload);
-    // const comment = await Comment.create();
-
-    // chargingStation.comments.push(comment);
 
     await chargingStation.reload({
       include: [{ association: 'owner' }, { association: 'comments' }],

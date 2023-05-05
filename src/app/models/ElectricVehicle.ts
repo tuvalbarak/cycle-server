@@ -11,6 +11,7 @@ import {
 
 import Battery from './Battery';
 import VehicleMeta from './VehiclesMeta';
+import User from './User';
 
 @Table({ tableName: 'electric_vehicles', timestamps: true })
 export default class ElectricVehicle extends Model {
@@ -29,4 +30,11 @@ export default class ElectricVehicle extends Model {
 
   @BelongsTo(() => VehicleMeta)
   vehicleMeta: VehicleMeta;
+
+  @ForeignKey(() => User)
+  @Column
+  ownerId: number;
+
+  @BelongsTo(() => User)
+  user: User;
 }
