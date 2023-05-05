@@ -22,7 +22,7 @@ const authHandler = Router();
  *            type: object
  *            properties:
  *              google_id:
- *                type: number
+ *                type: string
  *              email:
  *                type: string
  *                description: The user's email

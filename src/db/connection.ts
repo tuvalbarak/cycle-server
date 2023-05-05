@@ -29,8 +29,8 @@ export default class DatabaseConnection extends Sequelize {
   }
 
   async connectAndSync() {
-    // await this.sync({ force: true });
-    await this.sync();
+    await this.sync({ force: true });
+    // await this.sync();
     await this.authenticate();
   }
 }
