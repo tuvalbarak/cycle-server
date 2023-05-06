@@ -110,8 +110,8 @@ chargingStationsHandler.get(
  *                type: number
  *                description: The charging station charger power
  *              connectorType:
- *                type: number
- *                description: The charging station charger power
+ *                type: string
+ *                description: The charging station connector type
  *              isPrivate:
  *                type: boolean
  *                description: Charging station is privately owned

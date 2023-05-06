@@ -17,9 +17,9 @@ export default class ChargingStation extends Model {
 
   @Column name: string;
 
-  @Column lat: number;
+  @Column(DataType.FLOAT) lat: number;
 
-  @Column lng: number;
+  @Column(DataType.FLOAT) lng: number;
 
   @Column provider: string;
 
@@ -31,7 +31,7 @@ export default class ChargingStation extends Model {
 
   @Column count: number;
 
-  @Column power: number;
+  @Column(DataType.FLOAT) power: number;
 
   @Column connectorType: string;
 
