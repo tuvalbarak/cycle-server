@@ -53,6 +53,7 @@ authHandler.post(
         email: payload.email,
         name: payload.name,
         phone: payload.phone,
+        crystalsBalance: 50000,
       },
     });
 

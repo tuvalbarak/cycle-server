@@ -28,6 +28,7 @@ usersHandler.get(
       include: [
         { association: 'preference' },
         { association: 'electricVehicles' },
+        { association: 'station' },
       ],
     });
 
@@ -55,6 +56,7 @@ usersHandler.get(
       include: [
         { association: 'preference' },
         { association: 'electricVehicles' },
+        { association: 'station' },
       ],
     });
 
@@ -138,6 +140,7 @@ usersHandler.post(
       include: [
         { association: 'preference' },
         { association: 'electricVehicles' },
+        { association: 'station' },
       ],
     });
 
@@ -201,6 +204,8 @@ usersHandler.post(
  *                type: array
  *                items:
  *                  $ref: '#/components/schemas/ElectricVehicle'
+ *              station:
+ *                $ref: '#/components/schemas/ChargingStation'
  *    responses:
  *      200:
  *        description: Ok
@@ -219,6 +224,7 @@ usersHandler.patch(
       drivingCharacteristicId: req.body.driving_characteristic_id,
       myElectricVehicle: req.body.my_electric_vehicle,
       electricVehicles: req.body.electric_vehicles,
+      station: req.body.station,
       // preference: {
       //   areNotificationAllowed: req.body.preference.are_notification_allowed,
       //   areTollRoadsAllowed: req.body.preference.are_toll_roads_allowed,
@@ -231,6 +237,7 @@ usersHandler.patch(
       include: [
         { association: 'preference' },
         { association: 'electricVehicles' },
+        { association: 'station' },
       ],
     });
 
