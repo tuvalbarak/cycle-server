@@ -204,7 +204,66 @@ chargingStationsHandler.post(
 
     const comment = await Comment.create(payload);
 
-    res.json({ code: 200, message: 'ok', data: comment.dataValues });
+    const chargingStation = await ChargingStation.findByPk(
+      payload.chargingStationId,
+      {
+        include: [{ association: 'owner' }, { association: 'comments' }],
+      }
+    );
+
+    res.json({ code: 200, message: 'ok', data: chargingStation.dataValues });
+  })
+);
+
+/**
+ * @swagger
+ *  /chargingStations/{chargingStationId}/rating:
+ *  post:
+ *    tags:
+ *      - Charging Stations
+ *    parameters:
+ *      - name: chargingStationId
+ *        schema:
+ *          type: integer
+ *        description: A valid charging station id
+ *        required: true
+ *        in: path
+ *    requestBody:
+ *      required: true
+ *      content:
+ *        application/json:
+ *          schema:
+ *            type: object
+ *            properties:
+ *              rating:
+ *                type: integer
+ *    responses:
+ *      200:
+ *        description: Ok
+ *        content:
+ *          application/json:
+ *            schema:
+ *              $ref: '#/components/schemas/Comment'
+ */
+
+chargingStationsHandler.post(
+  '/:chargingStationId/rating',
+  asyncHandler(async (req: Request, res: Response, next: NextFunction) => {
+    const payload = {
+      chargingStationId: req.params.chargingStationId,
+      rating: req.body.rating,
+    };
+
+    const chargingStation = await ChargingStation.findByPk(
+      req.params.chargingStationId
+    );
+
+    chargingStation.ratings.push(req.body.rating);
+    chargingStation.reload({
+      include: [{ association: 'owner' }, { association: 'comments' }],
+    });
+
+    res.json({ code: 200, message: 'ok', data: chargingStation.dataValues });
   })
 );
 
