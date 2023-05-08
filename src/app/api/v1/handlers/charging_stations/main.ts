@@ -255,13 +255,14 @@ chargingStationsHandler.post(
     };
 
     const chargingStation = await ChargingStation.findByPk(
-      req.params.chargingStationId
+      req.params.chargingStationId,
+      {
+        include: [{ association: 'owner' }, { association: 'comments' }],
+      }
     );
 
-    chargingStation.ratings.push(req.body.rating);
-    chargingStation.reload({
-      include: [{ association: 'owner' }, { association: 'comments' }],
-    });
+    chargingStation.ratings = [payload.rating, ...chargingStation.ratings];
+    await chargingStation.save();
 
     res.json({ code: 200, message: 'ok', data: chargingStation.dataValues });
   })

@@ -6,6 +6,7 @@ import {
   ForeignKey,
   HasMany,
   BelongsTo,
+  Default,
 } from 'sequelize-typescript';
 
 import User from './User';
@@ -39,6 +40,7 @@ export default class ChargingStation extends Model {
 
   @Column condition: string;
 
+  @Default([])
   @Column(DataType.ARRAY(DataType.INTEGER))
   ratings: number[];
 
