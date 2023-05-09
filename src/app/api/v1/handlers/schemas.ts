@@ -100,6 +100,10 @@
  *          items:
  *            type: integer
  *            description: An array of vehicle IDs that the user has used in the past
+ *        gamifications:
+ *          type: array
+ *          items:
+ *            $ref: '#/components/schemas/Gamification'
  *    ChargingStation:
  *      type: object
  *      properties:
@@ -169,4 +173,17 @@
  *        chargingStationId:
  *          type: number
  *          description: The id of the charging station
+ *
+ *    Gamification:
+ *      type: object
+ *      properties:
+ *        id:
+ *          type: number
+ *          description: The unique identifier for the gamification
+ *        amount:
+ *          type: number
+ *          description: Amount of points gained by the action
+ *        description:
+ *          type: string
+ *          description: Description of the action
  */

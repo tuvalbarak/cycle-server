@@ -6,6 +6,7 @@ import User from '../../../../models/User';
 import UserPreferance from '../../../../models/UserPreferance';
 
 import { Landscape } from '../../../../models/UserPreferance';
+import Gamification from '../../../../models/Gamification';
 
 const usersHandler = Router();
 
@@ -29,6 +30,7 @@ usersHandler.get(
         { association: 'preference' },
         { association: 'electricVehicles' },
         { association: 'station' },
+        { association: 'gamifications' },
       ],
     });
 
@@ -57,6 +59,7 @@ usersHandler.get(
         { association: 'preference' },
         { association: 'electricVehicles' },
         { association: 'station' },
+        { association: 'gamifications' },
       ],
     });
 
@@ -141,6 +144,7 @@ usersHandler.post(
         { association: 'preference' },
         { association: 'electricVehicles' },
         { association: 'station' },
+        { association: 'gamifications' },
       ],
     });
 
@@ -238,6 +242,7 @@ usersHandler.patch(
         { association: 'preference' },
         { association: 'electricVehicles' },
         { association: 'station' },
+        { association: 'gamifications' },
       ],
     });
 
@@ -249,6 +254,63 @@ usersHandler.patch(
     }
 
     user = await user.update(userPayload, { hooks: true });
+
+    res.json({ code: 200, message: 'ok', data: user.dataValues });
+  })
+);
+
+/**
+ * @swagger
+ *  /users/{userId}/gamification:
+ *  post:
+ *    tags:
+ *      - Users
+ *    parameters:
+ *      - name: userId
+ *        schema:
+ *          type: integer
+ *        description: A valid user id
+ *        required: true
+ *        in: path
+ *    requestBody:
+ *      required: true
+ *      content:
+ *        application/json:
+ *          schema:
+ *            type: object
+ *            properties:
+ *              amount:
+ *                type: integer
+ *              description:
+ *                type: string
+ *    responses:
+ *      200:
+ *        description: Ok
+ *        content:
+ *          application/json:
+ *            schema:
+ *              $ref: '#/components/schemas/User'
+ */
+
+usersHandler.post(
+  '/:userId/gamification',
+  asyncHandler(async (req: Request, res: Response, next: NextFunction) => {
+    const payload = {
+      userId: req.params.userId,
+      amount: req.body.amount,
+      description: req.body.description,
+    };
+
+    const gamification = await Gamification.create(payload);
+
+    const user = await User.findByPk(payload.userId, {
+      include: [
+        { association: 'preference' },
+        { association: 'electricVehicles' },
+        { association: 'station' },
+        { association: 'gamifications' },
+      ],
+    });
 
     res.json({ code: 200, message: 'ok', data: user.dataValues });
   })
