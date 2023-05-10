@@ -243,7 +243,7 @@ chargingStationsHandler.post(
  *        content:
  *          application/json:
  *            schema:
- *              $ref: '#/components/schemas/Comment'
+ *              $ref: '#/components/schemas/ChargingStation'
  */
 
 chargingStationsHandler.post(
@@ -262,6 +262,59 @@ chargingStationsHandler.post(
     );
 
     chargingStation.ratings = [payload.rating, ...chargingStation.ratings];
+    await chargingStation.save();
+
+    res.json({ code: 200, message: 'ok', data: chargingStation.dataValues });
+  })
+);
+
+/**
+ * @swagger
+ *  /chargingStations/{chargingStationId}/status:
+ *  post:
+ *    tags:
+ *      - Charging Stations
+ *    parameters:
+ *      - name: chargingStationId
+ *        schema:
+ *          type: integer
+ *        description: A valid charging station id
+ *        required: true
+ *        in: path
+ *    requestBody:
+ *      required: true
+ *      content:
+ *        application/json:
+ *          schema:
+ *            type: object
+ *            properties:
+ *              status:
+ *                type: string
+ *    responses:
+ *      200:
+ *        description: Ok
+ *        content:
+ *          application/json:
+ *            schema:
+ *              $ref: '#/components/schemas/ChargingStation'
+ */
+
+chargingStationsHandler.post(
+  '/:chargingStationId/status',
+  asyncHandler(async (req: Request, res: Response, next: NextFunction) => {
+    const payload = {
+      chargingStationId: req.params.chargingStationId,
+      status: req.body.status,
+    };
+
+    const chargingStation = await ChargingStation.findByPk(
+      req.params.chargingStationId,
+      {
+        include: [{ association: 'owner' }, { association: 'comments' }],
+      }
+    );
+
+    chargingStation.condition = payload.status;
     await chargingStation.save();
 
     res.json({ code: 200, message: 'ok', data: chargingStation.dataValues });
