@@ -3,6 +3,10 @@ import { Sequelize } from 'sequelize-typescript';
 import * as dotenv from 'dotenv';
 dotenv.config();
 
+import connect from '../config/initializers/database';
+
+import { seedChargingStations } from '../tasks/seedChargingStations';
+
 export default class DatabaseConnection extends Sequelize {
   constructor(credentials: any) {
     const config = {
@@ -29,8 +33,14 @@ export default class DatabaseConnection extends Sequelize {
   }
 
   async connectAndSync() {
-    // await this.sync({ force: true });
+    // await DatabaseConnection.migrateDatabase();
     await this.sync();
     await this.authenticate();
+  }
+
+  static async migrateDatabase() {
+    const connection = connect();
+    await connection.sync({ force: true });
+    await seedChargingStations();
   }
 }

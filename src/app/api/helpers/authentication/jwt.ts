@@ -34,7 +34,7 @@ export const isAuth = () =>
 
     if (!user) {
       throw new ApiError(
-        HttpStatus.INTERNAL_SERVER_ERROR,
+        HttpStatus.BAD_REQUEST,
         'User not found, invalid data'
       );
     }

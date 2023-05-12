@@ -24,7 +24,8 @@ export default class ChargingStation extends Model {
 
   @Column provider: string;
 
-  @Column priceDetails: string;
+  @Column(DataType.TEXT)
+  priceDetails: string;
 
   @Column address: string;
 
