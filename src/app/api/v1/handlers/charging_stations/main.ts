@@ -321,4 +321,92 @@ chargingStationsHandler.post(
   })
 );
 
+/**
+ * @swagger
+ *  /chargingStations/{chargingStationId}:
+ *  patch:
+ *    tags:
+ *      - Charging Stations
+ *    parameters:
+ *      - name: chargingStationId
+ *        schema:
+ *          type: integer
+ *        description: A valid station id
+ *        in: path
+ *    requestBody:
+ *      required: true
+ *      content:
+ *        application/json:
+ *          schema:
+ *            type: object
+ *            properties:
+ *              name:
+ *                type: string
+ *              lat:
+ *                type: string
+ *              lng:
+ *                type: string
+ *              priceDetails:
+ *                type: string
+ *              address:
+ *                type: string
+ *              city:
+ *                type: string
+ *              count:
+ *                type: number
+ *              power:
+ *                type: number
+ *              connectorType:
+ *                type: string
+ *              condition:
+ *                type: string
+ *              isPrivate:
+ *                type: boolean
+ *              ownerId:
+ *                type: number
+ *    responses:
+ *      200:
+ *        description: Ok
+ */
+
+chargingStationsHandler.patch(
+  '/:chargingStationId',
+  asyncHandler(async (req: Request, res: Response, next: NextFunction) => {
+    const payload = {
+      name: req.body.name,
+      lat: req.body.lat,
+      lng: req.body.kng,
+      priceDetails: req.body.priceDetails,
+      address: req.body.address,
+      city: req.body.city,
+      count: req.body.count,
+      power: req.body.power,
+      connectorType: req.body.connectorType,
+      condition: req.body.condition,
+      isPrivate: req.body.isPrivate,
+      ownerId: req.body.ownerId,
+    };
+
+    let chargingStation = await ChargingStation.findByPk(
+      req.params.chargingStationId,
+      {
+        include: [{ association: 'owner' }, { association: 'comments' }],
+      }
+    );
+
+    if (!chargingStation) {
+      throw new ApiError(
+        HttpStatus.BAD_REQUEST,
+        `Charing station ${req.params.id} not found`
+      );
+    }
+
+    chargingStation = await chargingStation.update(payload, {
+      hooks: true,
+    });
+
+    res.json({ code: 200, message: 'ok', data: chargingStation.dataValues });
+  })
+);
+
 export default chargingStationsHandler;
