@@ -343,9 +343,9 @@ chargingStationsHandler.post(
  *              name:
  *                type: string
  *              lat:
- *                type: string
+ *                type: number
  *              lng:
- *                type: string
+ *                type: number
  *              priceDetails:
  *                type: string
  *              address:
@@ -375,7 +375,7 @@ chargingStationsHandler.patch(
     const payload = {
       name: req.body.name,
       lat: req.body.lat,
-      lng: req.body.kng,
+      lng: req.body.ךng,
       priceDetails: req.body.priceDetails,
       address: req.body.address,
       city: req.body.city,
