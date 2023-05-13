@@ -1,9 +1,13 @@
-import { Column, Table, Model, DataType, ForeignKey, HasOne } from "sequelize-typescript";
-import ElectricVehicle from "./ElectricVehicle";
-import VehicleMeta from "./VehiclesMeta";
+import {
+  Column,
+  Table,
+  Model,
+  DataType,
+  ForeignKey,
+  HasOne,
+} from 'sequelize-typescript';
 
-
-@Table({ tableName: 'batteries', timestamps: true})
+@Table({ tableName: 'batteries', timestamps: true })
 export default class Battery extends Model {
   @Column({ primaryKey: true, autoIncrement: true }) id: number;
 

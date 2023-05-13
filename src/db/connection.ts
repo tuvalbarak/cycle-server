@@ -6,6 +6,7 @@ dotenv.config();
 import connect from '../config/initializers/database';
 
 import { seedChargingStations } from '../tasks/seedChargingStations';
+import { seedElectricVehiclesMeta } from '../tasks/seedElectricVehiclesMeta';
 
 export default class DatabaseConnection extends Sequelize {
   constructor(credentials: any) {
@@ -33,8 +34,8 @@ export default class DatabaseConnection extends Sequelize {
   }
 
   async connectAndSync() {
-    // await DatabaseConnection.migrateDatabase();
-    await this.sync();
+    await DatabaseConnection.migrateDatabase();
+    // await this.sync();
     await this.authenticate();
   }
 
@@ -42,5 +43,6 @@ export default class DatabaseConnection extends Sequelize {
     const connection = connect();
     await connection.sync({ force: true });
     await seedChargingStations();
+    await seedElectricVehiclesMeta();
   }
 }
