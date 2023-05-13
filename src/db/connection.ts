@@ -34,8 +34,8 @@ export default class DatabaseConnection extends Sequelize {
   }
 
   async connectAndSync() {
-    await DatabaseConnection.migrateDatabase();
-    // await this.sync();
+    // await DatabaseConnection.migrateDatabase();
+    await this.sync();
     await this.authenticate();
   }
 
